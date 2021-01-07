@@ -19,8 +19,7 @@ import {
   ReloadInstructions,
 } from "react-native/Libraries/NewAppScreen";
 
-import StoriesCard from "./App/Screens/StoriesCard";
-import Story from "./App/Screens/Story";
+import Stories from "./App/Screens/Stories";
 
 const Stack = createStackNavigator();
 
@@ -33,13 +32,10 @@ function App() {
         }}
       >
         <Stack.Screen
-          name='StoriesCard'
-          component={StoriesCard}
+          name='Stories'
+          component={Stories}
         />
-        <Stack.Screen
-          name='Story'
-          component={Story}
-        />
+
 
       </Stack.Navigator>
     </NavigationContainer>
