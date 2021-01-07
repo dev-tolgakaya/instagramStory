@@ -1,92 +1,118 @@
-import React, { Component } from "react";
-import { Thumbnail } from "native-base";
+import React, {useState} from "react";
 import {
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  TouchableOpacity,
+    StyleSheet,
+    ScrollView,
+    View,
+    Text,
+    TouchableOpacity,
+    Image
 } from "react-native";
+import GestureRecognizer from 'react-native-swipe-gestures';
+
+const StoriesCard = (props) => {
+    const {user} = props;
+    const {stories = []} = user || {};
+    const [isModelOpen, setModel] = useState(false)
 
 
-class StoriesCard extends Component {
-  render() {
+    const swipeDown = () => {
+        if (!isModelOpen) {
+            props.onClose();
+        } else {
+            setModel(false)
+        }
+    }
+    /*         BU KISMI READMORE'U YAPTIKTAN SONRA AKTiF ET
+        const swipeUp = () => {
+         if (!isModelOpen && isReadMore) {
+                setModel(true);
+            }
+        }
+    */
+    const config = {
+        velocityThreshold: 0.3,
+        directionalOffsetThreshold: 80
+    }
+
+
     return (
-      <View style={styles.sectionContainer}>
-        <View style={{ height: 120 }}>
-          <View style={styles.storySectionLabel}>
-            <Text style={{ fontWeight: "bold" }}>Stories</Text>
-            <Text style={{ fontWeight: "bold" }}>Watch All</Text>
-          </View>
-          <View>
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{
-                alignItems: "center",
-                paddingStart: 5,
-                paddingEnd: 5,
-              }}
-            >
-              <TouchableOpacity onPress={()=>this.props.navigation.navigate('Story')}>
-                <View style={styles.thumbnailContainer}>
-                  <Thumbnail
-                    style={styles.thumbnailStyle}
-                    source={require("../Assets/StoriesHeaderThumbnails/1.jpg")}
-                  />
-                  <Text style={styles.thumbnailText}>GizemDlbe</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={()=>this.props.navigation.navigate('Story',{selectedImage : 2})}>
-                <View style={styles.thumbnailContainer}>
-                  <Thumbnail
-                    style={styles.thumbnailStyle}
-                    source={require("../Assets/StoriesHeaderThumbnails/2.jpg")}
-                  />
-                  <Text style={styles.thumbnailText}>ttlga.kaya</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={()=>this.props.navigation.navigate('Story',{selectedImage : 2})}>
-                <View style={styles.thumbnailContainer}>
-                  <Thumbnail
-                    style={styles.thumbnailStyle}
-                    source={require("../Assets/StoriesHeaderThumbnails/3.jpg")}
-                  />
-                  <Text style={styles.thumbnailText}>mirasTll</Text>
-                </View>
-              </TouchableOpacity>
-            </ScrollView>
-          </View>
-        </View>
-      </View>
-    );
-  }
+        <GestureRecognizer
+            onSwipeDown={swipeDown}
+            /* onSwipeUp = {swipeUp}*/
+            config={config}
+            style={styles.container}
+        >
+            <Image style={{width: 500, height: 500}} source={require('../Assets/StoryAvatars/3.jpg')}/>
+
+        </GestureRecognizer>
+    )
+
 }
 
+
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 40,
-    paddingHorizontal: 24,
-  },
-  storySectionLabel: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 7,
-  },
-  thumbnailContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  thumbnailStyle: {
-    marginHorizontal: 5,
-    borderColor: "pink",
-    borderWidth: 2,
-  },
-  thumbnailText: {
-    fontSize: 10,
-  },
+    container: {
+        flex: 1,
+        width: '100%',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        // paddingTop: 30,
+        backgroundColor: 'red',
+    },
+    progressBarArray: {
+        flexDirection: 'row',
+        position: 'absolute',
+        top: 30,
+        width: '98%',
+        height: 10,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    userView: {
+        flexDirection: 'row',
+        position: 'absolute',
+        top: 55,
+        width: '98%',
+        alignItems: 'center',
+    },
+    name: {
+        fontSize: 18,
+        fontWeight: '500',
+        marginLeft: 12,
+        color: 'white',
+    },
+    time: {
+        fontSize: 12,
+        fontWeight: '400',
+        marginTop: 3,
+        marginLeft: 12,
+        color: 'white',
+    },
+    content: { width: '100%',
+        height: '100%',
+    },
+    loading: {
+        backgroundColor: 'black',
+        height: '100%',
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    modal: {
+        width: '100%',
+        height: '90%',
+        backgroundColor: 'white',
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+    },
+    bar: {
+        width: 50,
+        height: 8,
+        backgroundColor: 'gray',
+        alignSelf: 'center',
+        borderRadius: 4,
+        marginTop: 8,
+    },
 });
 
 export default StoriesCard;

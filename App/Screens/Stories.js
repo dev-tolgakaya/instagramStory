@@ -82,7 +82,17 @@ const Stories = (props) => {
                     }}
                 >
                     <CubeNavigationHorizontal callBackAfterSwipe={scrollValue => onScrollChange(scrollValue)}>
-
+                        {
+                            AllStories.map((item,index)=>(
+                                <StoriesCard
+                                    onClose = {onStoryClose}
+                                    onStoryNext = {onStoryNext}
+                                    onStoryPrevious = {onStoryPrevious}
+                                    user = {item}
+                                    isNewStory = {index !== currentUserIndex}
+                                />
+                            ))
+                        }
                     </CubeNavigationHorizontal>
                 </Modal>
             </View>
