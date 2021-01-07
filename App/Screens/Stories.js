@@ -18,36 +18,38 @@ const Stories = (props) => {
     const onStoryClose = () => {
         setModal(false);
     }
-    const onStoryPrevious = (isScroll) => {
-        const newIndex = currentUserIndex - 1;
-        if (currentUserIndex > 0) {
-            setCurrentUserIndex(newIndex)
-            if (!isScroll) {
-                modalScroll.current.scrollTo(newIndex, true)
-            }
-        }
-    }
-    const onStoryNext = (isScroll) => {
-        const newIndex = currentUserIndex + 1;
-        if (AllStories.length - 1 > currentUserIndex) {
-            setCurrentUserIndex(newIndex)
-            if (!isScroll) {
-                modalScroll.current.scrollTo(newIndex, true)
-            }
-        } else {
-            setModal(false)
-        }
-    }
+
+     const onStoryPrevious = (isScroll) => {
+         const newIndex = currentUserIndex - 1;
+         if (currentUserIndex > 0) {
+             setCurrentUserIndex(newIndex)
+             if (!isScroll) {
+                 modalScroll.current.scrollTo(newIndex, true)
+             }
+         }
+     }
+     const onStoryNext = (isScroll) => {
+         const newIndex = currentUserIndex + 1;
+         if (AllStories.length - 1 > currentUserIndex) {
+             setCurrentUserIndex(newIndex)
+             if (!isScroll) {
+                 modalScroll.current.scrollTo(newIndex, true);
+             }
+         } else {
+             setModal(false)
+         }
+     }
 
     const onScrollChange = (scrollValue) => {
         if (currentScrollValue > scrollValue) {
             onStoryNext(true)
-            setCurrentUserIndex(scrollValue)
+            setCurrentScrollValue(scrollValue)
         }
         if (currentScrollValue < scrollValue) {
-            onStoryPrevious();
-            setCurrentUserIndex(scrollValue)
+            onStoryPrevious(true);
+            setCurrentScrollValue(scrollValue)
         }
+
     }
 
     return (
@@ -75,13 +77,16 @@ const Stories = (props) => {
                     transparent={false}
                     visible={isModalOpen}
                     onRequestClose={onStoryClose}
-                    onShow={() => { //Buraya storycontaineri yaptiktan sonra bi daha bak
+                    onShow={() => {
                         if (currentUserIndex > 0) {
-                            modalScroll.current.scrollTo(currentUserIndex, false);
+                            modalScroll.current.scrollTo(currentUserIndex, false);  //BU KISMI SOR CURRENT ?
                         }
                     }}
                 >
-                    <CubeNavigationHorizontal callBackAfterSwipe={scrollValue => onScrollChange(scrollValue)}>
+                    <CubeNavigationHorizontal
+                        ref={modalScroll}
+                        responderCaptureDx={120}
+                        callBackAfterSwipe={scrollValue => onScrollChange(scrollValue)}>
                         {
                             AllStories.map((item,index)=>(
                                 <StoriesCard

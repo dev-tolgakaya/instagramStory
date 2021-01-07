@@ -32,7 +32,7 @@ const StoriesCard = (props) => {
             setCurrentIndex(currentIndex + 1)
         }
         else{
-            props.onStoryNext()
+           props.onStoryNext()
         }
     }
 
