@@ -5,15 +5,46 @@ import {
     View,
     Text,
     TouchableOpacity,
-    Image
+    Image,
+    Dimensions
 } from "react-native";
 import GestureRecognizer from 'react-native-swipe-gestures';
+import Story from "./Story";
+
+const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const StoriesCard = (props) => {
     const {user} = props;
     const {stories = []} = user || {};
-    const [isModelOpen, setModel] = useState(false)
+    const [isModelOpen, setModel] = useState(false);
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const story = stories.length ? stories[currentIndex] : {};
 
+    const changeStory = (e) => {
+        if (e.locationX > SCREEN_WIDTH / 2) {
+            nextStory();
+        } else {
+            previousStory();
+        }
+    }
+    const nextStory = () => {
+        if (stories.length - 1 > currentIndex) {
+            setCurrentIndex(currentIndex + 1)
+        }
+        else{
+            props.onStoryNext()
+        }
+    }
+
+    const previousStory = () => {
+        if(currentIndex > 0 && stories.length){
+            setCurrentIndex(currentIndex-1)
+        }
+        else{
+            setCurrentIndex(0);
+            props.onStoryPrevious()
+        }
+    }
 
     const swipeDown = () => {
         if (!isModelOpen) {
@@ -42,8 +73,17 @@ const StoriesCard = (props) => {
             config={config}
             style={styles.container}
         >
-            <Image style={{width: 500, height: 500}} source={require('../Assets/StoryAvatars/3.jpg')}/>
-
+            {/*<Image style={{width: '100%', height: '100%'}} source={require('../Assets/StoryAvatars/3.jpg')}/>*/}
+            <TouchableOpacity
+                activeOpacity={1}
+                delayLongPress={500}
+                onPress={e => changeStory(e.nativeEvent)}  //NATIVE EVENT SOR ??
+                style={styles.container}
+            >
+                <View style={styles.container}>
+                    <Story story={story}/>
+                </View>
+            </TouchableOpacity>
         </GestureRecognizer>
     )
 
@@ -88,7 +128,8 @@ const styles = StyleSheet.create({
         marginLeft: 12,
         color: 'white',
     },
-    content: { width: '100%',
+    content: {
+        width: '100%',
         height: '100%',
     },
     loading: {

@@ -1,38 +1,68 @@
-import React, { Component } from "react";
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  TouchableOpacity
-} from "react-native";
+import React from 'react';
+import { Dimensions, Image, StyleSheet, View } from 'react-native';
+import Video from 'react-native-video';
+// import Image from 'react-native-scalable-image';
+import PropTypes from 'prop-types';
 
-class Story extends Component {
-  render() {
-    return (
-      <React.Fragment>
-        <View style={styles.sectionContainer}>
-        <View style={{  justifyContent:'center',alignItems:'center' }}>
-          <Image style={styles.cover} source={require('../Assets/StoryAvatars/1.jpg')}
-          />
-          <TouchableOpacity onPress={()=>this.props.navigation.navigate('StoriesCard')}>
-          <Text style={{position:'absolute',bottom:200}}>tolga</Text>
-          </TouchableOpacity>
+const ScreenWidth = Dimensions.get('window').width;
+
+const Story = (props) => {
+    const {story} = props;
+    const {url,type} = story || {};
+
+    return(
+        <View style={styles.container}>
+            {
+                type ==='image' ? (
+                    <Image
+                        source={{uri:url}}
+                        style={styles.content}
+                        resizeMode = "stretch"
+                        width = {ScreenWidth}
+                    />
+                )
+                    : <Video
+                        source={{uri:url}}
+                        style={styles.content}
+                    />
+            }
         </View>
-        </View>
-      </React.Fragment>
-    );
-  }
+    )
+
 }
 
+Story.propTypes = {
+    story: PropTypes.oneOfType([
+        PropTypes.object,
+        PropTypes.string,
+    ]),
+};
+
 const styles = StyleSheet.create({
-  sectionContainer: {
-    paddingHorizontal: 24,
-  },
-  cover: {
-   width:600,
-    height : 1000
-  }
+    container: {
+        flex: 1,
+        width: '100%',
+        backgroundColor: 'gray',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    content: {
+        width: '100%',
+        height: '100%',
+        flex: 1,
+    },
+    imageContent: {
+        width: '100%',
+        height: '100%',
+        flex: 1,
+    },
+    loading: {
+        backgroundColor: 'black',
+        height: '100%',
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
 })
 
 export default Story;
